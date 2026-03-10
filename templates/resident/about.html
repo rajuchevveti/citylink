@@ -1,0 +1,147 @@
+{% extends "shared/public_base.html" %}
+
+{% block title %}About CityLink{% endblock %}
+
+{% block main_class %}bg-white{% endblock %}
+
+{% block public_content %}
+    
+    <!-- 
+       1. HERO SECTION 
+    -->
+    <section class="relative h-[500px] flex items-center justify-center overflow-hidden bg-slate-900">
+        <div class="absolute inset-0 z-0 opacity-40">
+            <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <path d="M0 100 C 20 0 50 0 100 100 Z" fill="url(#grad1)" />
+                <defs>
+                    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#4f46e5;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+            </svg>
+        </div>
+        <div class="absolute inset-0 z-0">
+            <img src="{{ url_for('static', filename='shared/img/about.jpeg') }}" 
+                 class="w-full h-full object-cover mix-blend-overlay opacity-20"
+                 onerror="this.src='https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1920&auto=format&fit=crop'">
+        </div>
+
+        <div class="relative z-10 max-w-4xl px-6 text-center">
+            <h1 class="text-4xl md:text-6xl font-extrabold text-white tracking-tight mb-6 drop-shadow-xl">
+                Connecting Our City,<br />
+                <span class="text-indigo-400">One Service at a Time.</span>
+            </h1>
+            <p class="text-lg md:text-xl text-slate-300 mb-10 max-w-2xl mx-auto leading-relaxed">
+                We are building the digital infrastructure that powers local communities, creates jobs, and simplifies daily life for everyone.
+            </p>
+        </div>
+    </section>
+
+    <!-- 
+       2. OUR STORY 
+    -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+                <div class="inline-flex items-center px-3 py-1 rounded-full bg-indigo-50 text-indigo-600 text-xs font-bold uppercase tracking-wide mb-4">
+                    Our Mission
+                </div>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6">More than just a directory.</h2>
+                <div class="prose text-gray-600 text-lg leading-relaxed space-y-4">
+                    <p>CityLink started with a simple idea: <strong>Why is it so hard to find a trusted plumber or a good local doctor?</strong> In a world of instant connection, local services remained fragmented and offline.</p>
+                    <p>We set out to change that. CityLink is a smart platform that bridges the gap between <strong>residents needing help</strong> and <strong>skilled professionals seeking work</strong>.</p>
+                    <p>By digitizing word-of-mouth trust through verified reviews and community vouching, we aren't just fixing sinks—we are <strong>empowering the local economy</strong>.</p>
+                </div>
+            </div>
+            <div class="relative">
+                <div class="absolute -inset-4 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-2xl opacity-20 blur-lg"></div>
+                <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=800&auto=format&fit=crop" class="relative rounded-2xl shadow-2xl border border-gray-100 w-full object-cover">
+            </div>
+        </div>
+    </section>
+
+    <!-- 
+       3. STATS
+    -->
+    <section class="bg-slate-900 text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-slate-800">
+                <div class="p-4"><div class="text-4xl font-extrabold text-indigo-400 mb-2">5k+</div><div class="text-sm text-slate-400 font-medium">Verified Pros</div></div>
+                <div class="p-4"><div class="text-4xl font-extrabold text-cyan-400 mb-2">12k+</div><div class="text-sm text-slate-400 font-medium">Jobs Completed</div></div>
+                <div class="p-4"><div class="text-4xl font-extrabold text-pink-400 mb-2">98%</div><div class="text-sm text-slate-400 font-medium">Satisfaction Rate</div></div>
+                <div class="p-4"><div class="text-4xl font-extrabold text-emerald-400 mb-2">24/7</div><div class="text-sm text-slate-400 font-medium">Support Active</div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 
+       4. HOW IT WORKS 
+    -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 bg-gray-50">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold text-gray-900">How It Works</h2>
+            <p class="text-gray-500 mt-2">Simple, transparent, and secure for everyone.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+            <div class="hidden md:block absolute top-12 left-1/6 right-1/6 h-0.5 bg-gray-200 z-0 w-2/3 mx-auto"></div>
+            <!-- Step 1 -->
+            <div class="relative z-10 bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center group hover:-translate-y-1 transition-transform duration-300">
+                <div class="w-16 h-16 mx-auto bg-blue-50 rounded-full flex items-center justify-center mb-6 border-4 border-white shadow-sm group-hover:bg-blue-600 transition-colors">
+                    <i data-lucide="search" class="w-7 h-7 text-blue-600 group-hover:text-white"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">1. Search & Compare</h3>
+                <p class="text-gray-600 text-sm leading-relaxed">Browse verified profiles of plumbers, doctors, shops, and more. See real reviews and pricing.</p>
+            </div>
+            <!-- Step 2 -->
+            <div class="relative z-10 bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center group hover:-translate-y-1 transition-transform duration-300">
+                <div class="w-16 h-16 mx-auto bg-indigo-50 rounded-full flex items-center justify-center mb-6 border-4 border-white shadow-sm group-hover:bg-indigo-600 transition-colors">
+                    <i data-lucide="message-square" class="w-7 h-7 text-indigo-600 group-hover:text-white"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">2. Chat & Quote</h3>
+                <p class="text-gray-600 text-sm leading-relaxed">Directly message providers. Request a custom quote or book a fixed-price service instantly.</p>
+            </div>
+            <!-- Step 3 -->
+            <div class="relative z-10 bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center group hover:-translate-y-1 transition-transform duration-300">
+                <div class="w-16 h-16 mx-auto bg-green-50 rounded-full flex items-center justify-center mb-6 border-4 border-white shadow-sm group-hover:bg-green-600 transition-colors">
+                    <i data-lucide="check-circle-2" class="w-7 h-7 text-green-600 group-hover:text-white"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-3">3. Hire & Vouch</h3>
+                <p class="text-gray-600 text-sm leading-relaxed">Get the job done. Leave a review and "vouch" for their skills to help your neighbors.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 
+       5. CTA
+    -->
+    <section class="py-20">
+        <div class="max-w-5xl mx-auto px-4 text-center">
+            <div class="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-3xl p-10 md:p-16 text-white shadow-2xl relative overflow-hidden">
+                <div class="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 rounded-full bg-white opacity-10"></div>
+                <div class="absolute bottom-0 left-0 -ml-16 -mb-16 w-40 h-40 rounded-full bg-white opacity-10"></div>
+                <div class="relative z-10">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-6">Ready to simplify your city life?</h2>
+                    <p class="text-indigo-100 mb-10 max-w-2xl mx-auto text-lg">Join the fastest growing community of residents and professionals.</p>
+                    <div class="flex flex-col sm:flex-row justify-center gap-4">
+                        <a href="/" class="px-8 py-4 bg-white text-indigo-600 font-bold rounded-xl hover:bg-indigo-50 transition shadow-lg">Find a Service</a>
+                        <a href="/login" class="px-8 py-4 bg-transparent border border-indigo-200 text-white font-bold rounded-xl hover:bg-white/10 transition">Join as a Pro</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block scripts %}
+    <!-- FIX: Load the main script so Auth state (Raju/David) works correctly -->
+    <script src="{{ url_for('static', filename='resident/js/script.js') }}"></script>
+    
+    <!-- Initialize Icons -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if(typeof lucide !== 'undefined') lucide.createIcons();
+        });
+    </script>
+{% endblock %}

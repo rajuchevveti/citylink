@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CityLink Admin - {% block title %}Control Panel{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>html { font-family: 'Inter', sans-serif; }</style>
+    
+    <!-- SECURITY CHECK SCRIPT -->
+    <script>
+        (function() {
+            // Check for admin session immediately
+            const session = localStorage.getItem('citylinkAdmin');
+            const path = window.location.pathname;
+
+            // 1. Protect Admin Routes (Block access if no session)
+            if (!session && path.startsWith('/admin') && path !== '/admin/login') {
+                window.location.href = '/admin/login';
+            }
+            
+            // 2. Redirect if already logged in (Don't show login page again)
+            if (session && path === '/admin/login') {
+                window.location.href = '/admin/dashboard';
+            }
+        })();
+        
+        function handleAdminLogout() {
+            localStorage.removeItem('citylinkAdmin');
+            window.location.href = '/admin/login';
+        }
+    </script>
+</head>
+<body class="bg-gray-900 text-gray-100">
+
+    <div class="flex min-h-screen">
+
+        <!-- ADMIN SIDEBAR -->
+        <aside class="w-64 bg-black border-r border-gray-800 fixed h-full z-30 hidden lg:flex flex-col">
+            <div class="h-20 flex items-center px-6 border-b border-gray-800">
+                <div class="flex items-center gap-2 text-white font-bold text-xl tracking-tight">
+                    <div class="bg-yellow-500 p-1.5 rounded-lg text-black">
+                        <i data-lucide="shield" class="w-5 h-5"></i>
+                    </div>
+                    CityLink <span class="text-yellow-500 text-[10px] uppercase border border-yellow-600 px-1.5 rounded ml-1">Admin</span>
+                </div>
+            </div>
+
+            <nav class="flex-1 px-3 py-6 space-y-1">
+                <p class="px-4 text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2">Platform</p>
+                
+                <a href="/admin/dashboard" class="flex items-center px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-white transition-colors">
+                    <i data-lucide="bar-chart-3" class="w-5 h-5 mr-3 text-yellow-500"></i> Overview
+                </a>
+                
+                <a href="/admin/users" class="flex items-center px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-white transition-colors">
+                    <i data-lucide="users" class="w-5 h-5 mr-3 text-gray-500"></i> Users & Pros
+                </a>
+
+                <a href="/admin/settings" class="flex items-center px-4 py-3 rounded-lg text-gray-300 hover:bg-gray-800 hover:text-white transition-colors">
+                    <i data-lucide="settings" class="w-5 h-5 mr-3 text-gray-500"></i> Settings
+                </a>
+            </nav>
+            
+            <div class="p-4 border-t border-gray-800">
+                 <!-- Sidebar Logout Button -->
+                 <button onclick="handleAdminLogout()" class="flex items-center w-full px-4 py-2 text-gray-500 hover:text-red-400 transition-colors text-sm">
+                    <i data-lucide="log-out" class="w-4 h-4 mr-3"></i> Sign Out
+                </button>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="flex-1 lg:ml-64 flex flex-col min-h-screen bg-gray-900">
+            <header class="h-20 bg-gray-900 border-b border-gray-800 flex justify-between items-center px-8 sticky top-0 z-20">
+                <h2 class="text-xl font-bold text-white">{% block header_title %}Command Center{% endblock %}</h2>
+                <div class="flex items-center gap-4">
+                    <div class="text-right hidden sm:block">
+                        <p class="text-sm font-bold text-white">Administrator</p>
+                        <p class="text-[10px] text-green-400 uppercase font-bold">System Healthy</p>
+                    </div>
+                    <div class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-yellow-500 border border-gray-700">
+                        <i data-lucide="shield" class="w-5 h-5"></i>
+                    </div>
+
+                    <!-- HEADER LOGOUT BUTTON (NEW) -->
+                    <button onclick="handleAdminLogout()" class="p-2 text-gray-400 hover:text-red-500 transition-colors ml-2 border-l border-gray-700 pl-4" title="Sign Out">
+                        <i data-lucide="log-out" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </header>
+
+            <div class="p-8">
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+    </div>
+
+    <script>lucide.createIcons();</script>
+</body>
+</html>

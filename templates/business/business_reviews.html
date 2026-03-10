@@ -1,0 +1,57 @@
+{% extends "business/business_portal_base.html" %}
+
+{% block title %}Review Management{% endblock %}
+
+{% block portal_content %}
+    
+    <div class="bg-white shadow-lg rounded-xl p-6 mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-1">Review Management</h1>
+        <p class="text-gray-600">Track and respond to customer feedback to maintain your excellent reputation.</p>
+    </div>
+
+    <!-- Review Overview/Filtering Tabs -->
+    <section class="bg-white p-6 rounded-xl shadow-lg mb-8">
+        <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b pb-2">Review Management</h2>
+        
+        <!-- Tabs for filtering reviews -->
+        <div class="flex border-b border-gray-200 mb-6 space-x-4 overflow-x-auto">
+            <button class="text-indigo-600 border-b-2 border-indigo-600 font-semibold py-2 px-4 transition flex-shrink-0">
+                All Reviews
+            </button>
+            <button class="text-gray-500 hover:text-indigo-600 font-medium py-2 px-4 border-b-2 border-transparent transition flex-shrink-0">
+                Positive
+            </button>
+            <button class="text-gray-500 hover:text-indigo-600 font-medium py-2 px-4 border-b-2 border-transparent transition flex-shrink-0">
+                Critical
+            </button>
+            <button class="text-gray-500 hover:text-indigo-600 font-medium py-2 px-4 border-b-2 border-transparent transition flex-shrink-0">
+                Pending Reply
+            </button>
+        </div>
+
+        <!-- Review Cards Grid -->
+        <div id="reviews-list-container" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            
+            <!-- Loading State -->
+            <p id="reviews-loading" class="text-gray-500 text-center lg:col-span-2">
+                <i data-lucide="loader-circle" class="w-6 h-6 mx-auto animate-spin"></i>
+                Loading live reviews...
+            </p>
+
+            <!-- No Reviews State (Hidden by default) -->
+            <p id="no-reviews-message" class="hidden text-gray-500 text-center lg:col-span-2">
+                <i data-lucide="inbox" class="w-8 h-8 mx-auto mb-2 text-gray-400"></i>
+                No reviews found for your service yet.
+            </p>
+            
+            <!-- Static cards removed. JS will populate this area. -->
+
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block scripts %}
+    <!-- Link the new dedicated script for fetching reviews -->
+    <script src="{{ url_for('static', filename='business/js/reviews_manager.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends "business/business_portal_base.html" %}
+
+{% block title %}Inbox & Leads{% endblock %}
+
+{% block portal_content %}
+
+    <!-- Header -->
+    <div class="flex justify-between items-end mb-6">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900">Inbox & Leads</h1>
+            <p class="text-gray-500 text-sm">Manage quote requests and chat with customers.</p>
+        </div>
+        <div class="bg-white p-1 rounded-lg border border-gray-200 flex text-sm font-medium">
+            <button class="px-4 py-1.5 bg-indigo-50 text-indigo-700 rounded-md shadow-sm">All</button>
+            <button class="px-4 py-1.5 text-gray-500 hover:text-gray-700">Unread</button>
+            <button class="px-4 py-1.5 text-gray-500 hover:text-gray-700">Archived</button>
+        </div>
+    </div>
+
+    <!-- Loading State -->
+    <div id="leads-loading" class="py-20 text-center">
+        <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-indigo-100 border-t-indigo-600 mb-3"></div>
+        <p class="text-gray-500 text-sm">Syncing messages...</p>
+    </div>
+
+    <div id="leads-content" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- COLUMN 1: NEW REQUESTS (Requires Action) -->
+        <div class="lg:col-span-1 space-y-4">
+            <div class="flex items-center gap-2 mb-2">
+                <span class="w-2 h-2 bg-red-500 rounded-full"></span>
+                <h2 class="font-bold text-gray-800 text-sm uppercase tracking-wide">Action Required</h2>
+                <span id="count-new" class="bg-gray-100 text-gray-600 text-xs px-2 py-0.5 rounded-full font-bold">0</span>
+            </div>
+            <div id="list-new-requests" class="space-y-3">
+                <!-- JS injects "Quote Requests" here -->
+            </div>
+        </div>
+
+        <!-- COLUMN 2: ACTIVE CONVERSATIONS (General Chat) -->
+        <div class="lg:col-span-2 space-y-4">
+            <div class="flex items-center gap-2 mb-2">
+                <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+                <h2 class="font-bold text-gray-800 text-sm uppercase tracking-wide">Active Conversations</h2>
+                <span id="count-active" class="bg-gray-100 text-gray-600 text-xs px-2 py-0.5 rounded-full font-bold">0</span>
+            </div>
+            
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                <div id="list-active-chats" class="divide-y divide-gray-100">
+                    <!-- JS injects "Active Chats" here -->
+                </div>
+                <!-- Empty State -->
+                <div id="empty-active" class="hidden p-12 text-center">
+                    <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-400">
+                        <i data-lucide="message-square" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-gray-900 font-bold">No active chats</h3>
+                    <p class="text-gray-500 text-sm">Messages from customers will appear here.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Link Logic Script -->
+    <script src="{{ url_for('static', filename='business/js/leads_manager.js') }}"></script>
+{% endblock %}

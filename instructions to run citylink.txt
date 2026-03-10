@@ -1,0 +1,30 @@
+instructions to run citylink
+
+"D:\my files\RAJU PROJECTS\Citylink"
+
+D:\my files\RAJU PROJECTS\Citylink>python app.py
+
+url
+
+auth page
+http://192.168.29.228:5000/login#
+
+resident dashboard
+http://192.168.29.228:5000/dashboard
+
+business dashboard
+http://192.168.29.228:5000/business/dashboard
+
+admin dashboard
+http://localhost:5000/admin/dashboard
+
+creditnials 
+
+RESIDENT
+raju - raju@gmail.com - raju@123
+
+business 
+David - david@gmail.com - david@123
+
+admin 
+admin@gmail.com - admin@123

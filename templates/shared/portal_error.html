@@ -1,0 +1,16 @@
+{% extends "portal_base.html" %}
+
+{% block title %}Error{% endblock %}
+
+{% block content %}
+    <div class="flex items-center justify-center min-h-screen-minus-header p-10">
+        <div class="text-center bg-white p-12 rounded-xl shadow-xl">
+            <i data-lucide="alert-triangle" class="w-16 h-16 text-red-500 mx-auto mb-4"></i>
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">Oops! Something Went Wrong.</h1>
+            <p class="text-gray-600 mb-6">{{ error_message | default("The page you are looking for could not be found.") }}</p>
+            <a href="/" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-6 rounded-lg transition duration-200">
+                Go to Homepage
+            </a>
+        </div>
+    </div>
+{% endblock %}

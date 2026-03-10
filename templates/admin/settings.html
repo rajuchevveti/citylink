@@ -1,0 +1,95 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}Platform Settings{% endblock %}
+{% block header_title %}System Configuration{% endblock %}
+
+{% block content %}
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        
+        <!-- Revenue Control -->
+        <div class="bg-gray-800 rounded-xl border border-gray-700 shadow-lg p-8">
+            <div class="flex items-center gap-3 mb-6 border-b border-gray-700 pb-4">
+                <div class="p-2 bg-yellow-500/10 rounded-lg text-yellow-500">
+                    <i data-lucide="percent" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h2 class="text-lg font-bold text-white">Revenue Model</h2>
+                    <p class="text-gray-400 text-sm">Set the platform commission fee.</p>
+                </div>
+            </div>
+            
+            <div class="space-y-6">
+                <div>
+                    <div class="flex justify-between text-sm mb-2">
+                        <span class="text-gray-300">Commission Rate</span>
+                        <span class="text-yellow-500 font-bold" id="commission-display">10%</span>
+                    </div>
+                    <input type="range" id="commission-slider" min="0" max="30" value="10" 
+                           class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-yellow-500">
+                    <p class="text-xs text-gray-500 mt-2">Applies to all future transactions.</p>
+                </div>
+                
+                <div class="bg-gray-900 p-4 rounded-lg border border-gray-700 flex justify-between items-center">
+                    <span class="text-gray-400 text-sm">Estimated Monthly Revenue</span>
+                    <span class="text-white font-mono text-lg">€<span id="estimated-revenue">4,500</span></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Service Categories -->
+        <div class="bg-gray-800 rounded-xl border border-gray-700 shadow-lg p-8">
+            <div class="flex items-center gap-3 mb-6 border-b border-gray-700 pb-4">
+                <div class="p-2 bg-blue-500/10 rounded-lg text-blue-500">
+                    <i data-lucide="layers" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h2 class="text-lg font-bold text-white">Service Categories</h2>
+                    <p class="text-gray-400 text-sm">Manage active industry verticals.</p>
+                </div>
+            </div>
+            
+            <div class="space-y-4">
+                <div class="flex gap-2">
+                    <input type="text" id="new-category-input" placeholder="Add new category (e.g. Drone Repair)" 
+                           class="flex-grow bg-gray-900 border border-gray-600 text-white rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 outline-none text-sm">
+                    <button id="add-category-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-bold text-sm transition">
+                        Add
+                    </button>
+                </div>
+                
+                <div id="categories-list" class="flex flex-wrap gap-2 max-h-48 overflow-y-auto p-2 border border-gray-700/50 rounded-lg">
+                    <!-- JS will populate tags here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- System Actions -->
+        <div class="lg:col-span-2 bg-gray-800 rounded-xl border border-gray-700 shadow-lg p-8 flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <div class="p-2 bg-red-500/10 rounded-lg text-red-500">
+                    <i data-lucide="power" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h3 class="text-white font-bold">Maintenance Mode</h3>
+                    <p class="text-gray-400 text-sm">Temporarily disable new bookings.</p>
+                </div>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="maintenance-toggle" class="sr-only peer">
+                <div class="w-11 h-6 bg-gray-700 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-red-900 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"></div>
+            </label>
+        </div>
+
+        <!-- Save Bar -->
+        <div class="lg:col-span-2 flex justify-end">
+            <button id="save-settings-btn" class="bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-3 px-8 rounded-xl shadow-lg hover:shadow-yellow-500/20 transition transform active:scale-95 flex items-center">
+                <i data-lucide="save" class="w-5 h-5 mr-2"></i> Save Configuration
+            </button>
+        </div>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='admin/js/admin_settings.js') }}"></script>
+
+{% endblock %}

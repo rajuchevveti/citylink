@@ -1,0 +1,143 @@
+{% extends "business/business_portal_base.html" %}
+
+{% block title %}Analytics & Reporting{% endblock %}
+
+{% block portal_content %}
+    <!-- Load Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Header -->
+    <div class="bg-white shadow-lg rounded-2xl p-8 mb-8 border border-gray-100">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">Analytics & Reporting</h1>
+        <p class="text-gray-500">Real-time performance insights and financial growth metrics.</p>
+    </div>
+
+    <!-- Controls -->
+    <div class="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
+        <div class="flex items-center space-x-3 bg-gray-100 p-1.5 rounded-lg">
+            <span class="px-3 py-1 text-xs font-bold text-gray-500 uppercase tracking-wide">Timeframe:</span>
+            <button class="px-4 py-1.5 bg-white text-indigo-600 shadow-sm rounded-md text-sm font-bold transition">Last 30 Days</button>
+            <button class="px-4 py-1.5 text-gray-500 hover:text-gray-700 text-sm font-medium transition">All Time</button>
+        </div>
+        <button onclick="fetchAnalyticsData(JSON.parse(localStorage.getItem('citylinkUser')).serviceId)" 
+                class="flex items-center text-indigo-600 font-bold text-sm hover:bg-indigo-50 px-4 py-2 rounded-lg transition">
+            <i data-lucide="refresh-cw" class="w-4 h-4 mr-2"></i> Refresh Data
+        </button>
+    </div>
+
+    <!-- KPI Cards -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        
+        <!-- Inquiries -->
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-xs font-bold text-gray-400 uppercase tracking-wide">Total Inquiries</p>
+                    <p class="text-3xl font-extrabold text-gray-900 mt-2" id="kpi-inquiries">0</p>
+                </div>
+                <div class="p-3 bg-blue-50 text-blue-600 rounded-xl">
+                    <i data-lucide="clipboard-list" class="w-6 h-6"></i>
+                </div>
+            </div>
+            <div class="mt-4 flex items-center text-xs text-green-600 font-medium">
+                <i data-lucide="trending-up" class="w-3 h-3 mr-1"></i> Live Tracking
+            </div>
+        </div>
+        
+        <!-- Conversion -->
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-xs font-bold text-gray-400 uppercase tracking-wide">Conversion Rate</p>
+                    <p class="text-3xl font-extrabold text-gray-900 mt-2"><span id="kpi-conversion">0</span>%</p>
+                </div>
+                <div class="p-3 bg-purple-50 text-purple-600 rounded-xl">
+                    <i data-lucide="bar-chart" class="w-6 h-6"></i>
+                </div>
+            </div>
+            <div class="mt-4 text-xs text-gray-400">Based on Leads vs Booked</div>
+        </div>
+        
+        <!-- Revenue -->
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-xs font-bold text-gray-400 uppercase tracking-wide">Total Revenue</p>
+                    <p class="text-3xl font-extrabold text-gray-900 mt-2">₹<span id="kpi-revenue">0</span></p>
+                </div>
+                <div class="p-3 bg-green-50 text-green-600 rounded-xl">
+                    <i data-lucide="wallet" class="w-6 h-6"></i>
+                </div>
+            </div>
+            <div class="mt-4 flex items-center text-xs text-green-600 font-medium">
+                <i data-lucide="check-circle" class="w-3 h-3 mr-1"></i> Verified Earnings
+            </div>
+        </div>
+        
+        <!-- Rating -->
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-xs font-bold text-gray-400 uppercase tracking-wide">Avg Rating</p>
+                    <div class="flex items-center mt-2">
+                        <p class="text-3xl font-extrabold text-gray-900 mr-2" id="kpi-rating">0.0</p>
+                        <i data-lucide="star" class="w-6 h-6 text-yellow-400 fill-current"></i>
+                    </div>
+                </div>
+                <div class="p-3 bg-yellow-50 text-yellow-600 rounded-xl">
+                    <i data-lucide="award" class="w-6 h-6"></i>
+                </div>
+            </div>
+            <div class="mt-4 text-xs text-gray-400"><span id="kpi-review-count">0</span> Verified Reviews</div>
+        </div>
+    </section>
+
+    <!-- Charts Section -->
+    <section class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+        
+        <!-- Main Chart -->
+        <div class="lg:col-span-2 bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+            <h3 class="text-lg font-bold text-gray-900 mb-6">Revenue Trend</h3>
+            <div class="relative h-80 w-full flex items-center justify-center bg-gray-50 rounded-xl overflow-hidden">
+                 <!-- Canvas with a fallback container -->
+                <canvas id="mainChart" class="z-10"></canvas>
+                <!-- Empty State Overlay (JS toggles this) -->
+                <div class="empty-state-msg absolute inset-0 flex flex-col items-center justify-center text-gray-400 hidden">
+                    <i data-lucide="bar-chart-2" class="w-10 h-10 mb-2 opacity-30"></i>
+                    <p>No transaction data available yet.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Funnel Chart -->
+        <div class="lg:col-span-1 bg-white p-8 rounded-2xl shadow-sm border border-gray-100 flex flex-col">
+            <h3 class="text-lg font-bold text-gray-900 mb-6">Lead Funnel</h3>
+            <div class="relative h-64 w-full flex justify-center items-center flex-grow">
+                <canvas id="funnelChart"></canvas>
+            </div>
+            <div class="mt-6 flex justify-center gap-4 text-xs text-gray-500 font-medium">
+                <div class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-slate-400"></span> Leads</div>
+                <div class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-amber-400"></span> Quoted</div>
+                <div class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-blue-500"></span> Booked</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Review Snippets -->
+    <section class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+        <div class="flex justify-between items-center mb-6 border-b border-gray-100 pb-4">
+            <h2 class="text-lg font-bold text-gray-900">Recent Feedback</h2>
+            <a href="/business/reviews" class="text-sm font-bold text-indigo-600 hover:text-indigo-800">View All</a>
+        </div>
+        
+        <div id="reviews-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- JS Injects Reviews Here -->
+            <div class="col-span-2 py-12 text-center text-gray-400 italic bg-gray-50 rounded-xl border border-dashed border-gray-200">
+                Loading reviews...
+            </div>
+        </div>
+    </section>
+
+    <!-- Link to JS -->
+    <script src="{{ url_for('static', filename='business/js/analytics.js') }}"></script>
+{% endblock %}

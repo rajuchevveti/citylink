@@ -1,0 +1,147 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+{% block header_title %}Platform Overview{% endblock %}
+
+{% block content %}
+    <!-- KPI Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <!-- Total Revenue -->
+        <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-lg">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-sm font-medium text-gray-400">Platform Revenue</p>
+                    <h3 class="text-3xl font-bold text-white mt-2">€{{ revenue }}</h3>
+                </div>
+                <div class="p-3 bg-yellow-500/10 rounded-lg text-yellow-500">
+                    <i data-lucide="wallet" class="w-6 h-6"></i>
+                </div>
+            </div>
+            <div class="mt-4 text-xs text-gray-500">
+                <span class="text-green-400 font-bold">Dynamic</span> Commission on every job
+            </div>
+        </div>
+
+        <!-- Jobs Processed -->
+        <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-lg">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-sm font-medium text-gray-400">Jobs Processed</p>
+                    <h3 class="text-3xl font-bold text-white mt-2">{{ jobs }}</h3>
+                </div>
+                <div class="p-3 bg-blue-500/10 rounded-lg text-blue-500">
+                    <i data-lucide="check-circle" class="w-6 h-6"></i>
+                </div>
+            </div>
+            <div class="mt-4 text-xs text-gray-500">
+                Completed transactions
+            </div>
+        </div>
+
+        <!-- Active Providers -->
+        <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-lg">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-sm font-medium text-gray-400">Active Providers</p>
+                    <h3 class="text-3xl font-bold text-white mt-2">{{ providers }}</h3>
+                </div>
+                <div class="p-3 bg-purple-500/10 rounded-lg text-purple-500">
+                    <i data-lucide="briefcase" class="w-6 h-6"></i>
+                </div>
+            </div>
+            <div class="mt-4 text-xs text-gray-500">
+                Currently online
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Finance Ledger -->
+    <div class="bg-gray-800 rounded-xl border border-gray-700 shadow-lg overflow-hidden">
+        <div class="p-6 border-b border-gray-700 flex justify-between items-center">
+            <h3 class="text-lg font-bold text-white">Live Transaction Ledger</h3>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm text-gray-400">
+                <thead class="bg-gray-900/50 text-xs uppercase font-bold text-gray-500">
+                    <tr>
+                        <th class="px-6 py-4">Time</th>
+                        <th class="px-6 py-4">Provider</th>
+                        <th class="px-6 py-4">Total</th>
+                        <th class="px-6 py-4 text-yellow-500">Platform Fee</th>
+                        <th class="px-6 py-4">Payout</th>
+                        <th class="px-6 py-4">Status</th>
+                        <th class="px-6 py-4 text-right">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-700">
+                    {% if recent_transactions %}
+                        {% for txn in recent_transactions %}
+                        <tr class="hover:bg-gray-700/50 transition">
+                            <td class="px-6 py-4 whitespace-nowrap">{{ txn.timestamp[:10] }}</td>
+                            <td class="px-6 py-4 font-medium text-white">{{ txn.provider }}</td>
+                            
+                            <!-- REFUND ROW -->
+                            {% if txn.total_amount < 0 %}
+                                <td class="px-6 py-4 text-red-400">₹{{ txn.total_amount }}</td>
+                                <td class="px-6 py-4 text-red-400">₹{{ txn.platform_fee }}</td>
+                                <td class="px-6 py-4 text-red-400">₹{{ txn.provider_payout }}</td>
+                                <td class="px-6 py-4"><span class="px-2 py-1 rounded-full bg-red-500/10 text-red-400 text-xs font-bold">Refunded</span></td>
+                                <td class="px-6 py-4"></td>
+                            
+                            <!-- DISPUTED ROW (New Logic) -->
+                            {% elif txn.status == 'Disputed' %}
+                                <td class="px-6 py-4 text-white">₹{{ txn.total_amount }}</td>
+                                <td class="px-6 py-4 text-yellow-400 font-bold">+ ₹{{ txn.platform_fee }}</td>
+                                <td class="px-6 py-4 text-gray-300">₹{{ txn.provider_payout }}</td>
+                                <td class="px-6 py-4">
+                                    <span class="px-2 py-1 rounded-full bg-orange-500/20 text-orange-400 text-xs font-bold border border-orange-500/30 animate-pulse">
+                                        On Hold
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <button onclick="processRefund('{{ txn.booking_id }}')" class="text-xs bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded transition shadow-sm">
+                                        Resolve Refund
+                                    </button>
+                                </td>
+
+                            <!-- STANDARD SETTLED ROW -->
+                            {% else %}
+                                <td class="px-6 py-4">₹{{ txn.total_amount }}</td>
+                                <td class="px-6 py-4 text-yellow-400 font-bold">+ ₹{{ txn.platform_fee }}</td>
+                                <td class="px-6 py-4 text-gray-300">₹{{ txn.provider_payout }}</td>
+                                <td class="px-6 py-4">
+                                    <span class="px-2 py-1 rounded-full bg-green-500/10 text-green-400 text-xs font-bold border border-green-500/20">Settled</span>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <button onclick="processRefund('{{ txn.booking_id }}')" class="text-xs text-red-400 hover:text-white hover:bg-red-900 border border-red-900/50 px-2 py-1 rounded transition">Refund</button>
+                                </td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr><td colspan="7" class="px-6 py-12 text-center text-gray-600 italic">No transactions yet.</td></tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        async function processRefund(bookingId) {
+            if(!confirm("Are you sure you want to refund this transaction? This will deduct funds from the provider.")) return;
+            try {
+                const res = await fetch('/api/admin/refund', {
+                    method: 'POST', headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ booking_id: bookingId })
+                });
+                const data = await res.json();
+                if(data.success) {
+                    alert("Refund Processed Successfully.");
+                    window.location.reload();
+                } else { alert("Failed: " + data.error); }
+            } catch(e) { alert("Error connecting to server."); }
+        }
+        lucide.createIcons();
+    </script>
+
+{% endblock %}

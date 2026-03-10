@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block body_class %}bg-gray-100 text-gray-800{% endblock %}
+
+{% block header %}
+    <!-- Header (Portal Style - Sticky, White, for Dashboard/Profile/Chat) -->
+    <header class="bg-white shadow-md sticky top-0 z-20">
+        <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="/" class="text-2xl font-extrabold tracking-tight text-gray-900 flex items-center">
+                <i data-lucide="link" class="w-7 h-7 mr-2 text-indigo-600"></i>
+                CityLink
+            </a>
+            
+            <!-- Dynamic navigation based on user type -->
+            <nav class="hidden sm:flex space-x-6 text-sm font-semibold text-gray-600" id="portal-navigation">
+                <!-- Navigation will be populated by JavaScript based on user type -->
+            </nav>
+            
+            <!-- User Profile Icon -->
+            <div class="flex items-center space-x-4">
+                 <button class="p-2 rounded-full bg-indigo-50 hover:bg-indigo-100 text-indigo-600">
+                    <i data-lucide="search" class="w-5 h-5"></i>
+                 </button>
+                 <a href="#" id="profile-link" class="p-2 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-md">
+                    <i data-lucide="user" class="w-6 h-6"></i>
+                 </a>
+            </div>
+        </div>
+    </header>
+{% endblock %}
+
+{% block main_class %}{% endblock %}
+
+{% block content %}
+    <!-- Main portal content block (to be overridden by dashboard/profile/chat) -->
+    {% endblock %}
+    
+<!-- Overrides base.html footer to hide it for the full-screen portal view -->
+{% block footer %}{% endblock %}
+
+{% block scripts %}
+    <script>
+        // Centralized logout logic for all portal pages
+        function handleLogout() {
+            localStorage.removeItem('citylinkUser');
+            window.location.href = '/'; 
+        }
+
+        // Dynamic navigation based on user type
+        function setupPortalNavigation() {
+            const userData = localStorage.getItem('citylinkUser');
+            const navContainer = document.getElementById('portal-navigation');
+            const profileLink = document.getElementById('profile-link');
+            
+            if (!userData || !navContainer) return;
+            
+            try {
+                const user = JSON.parse(userData);
+                
+                if (user.type === 'Business') {
+                    // Business user navigation
+                    navContainer.innerHTML = `
+                        <a href="/business/dashboard" class="hover:text-indigo-600 font-bold">Dashboard</a>
+                        <a href="/business/leads" class="hover:text-indigo-600">Leads</a>
+                        <a href="/business/analytics" class="hover:text-indigo-600">Analytics</a>
+                    `;
+                    if (profileLink) profileLink.href = '/business/dashboard';
+                } else {
+                    // Resident user navigation
+                    navContainer.innerHTML = `
+                        <a href="/dashboard" class="hover:text-indigo-600 font-bold">Dashboard</a>
+                        <a href="/bookings" class="hover:text-indigo-600">Bookings</a>
+                        <a href="/" class="hover:text-indigo-600">Find Services</a>
+                    `;
+                    if (profileLink) profileLink.href = '/dashboard';
+                }
+            } catch (e) {
+                console.error("Error setting up portal navigation:", e);
+            }
+        }
+
+        // Attach logout listeners and setup navigation
+        document.addEventListener('DOMContentLoaded', () => {
+            const logoutButton = document.getElementById('logout-btn-portal');
+            if (logoutButton) {
+                logoutButton.addEventListener('click', handleLogout);
+            }
+            setupPortalNavigation();
+        });
+    </script>
+{% endblock %}

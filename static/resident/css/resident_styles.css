@@ -1,0 +1,10 @@
+/* Dedicated styles for the auth page to define the background image */
+
+/* Use the same cityscape image for the Auth background but with different styling */
+.auth-background {
+    background-image: url('/static/auth.png');
+    background-size: cover;
+    background-position: center center;
+    /* Apply a filter to make the text pop against the background */
+    filter: brightness(0.8) contrast(1.1);
+}

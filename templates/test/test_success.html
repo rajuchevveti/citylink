@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auth Test Successful</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="w-full max-w-lg bg-white p-8 rounded-xl shadow-2xl text-center border-t-8 border-green-600">
+        
+        <h2 id="welcome-message" class="text-3xl font-extrabold text-green-600 mb-4">
+            Test Authentication Successful!
+        </h2>
+        
+        <p id="context-message" class="text-lg text-gray-700 mb-6 font-semibold">
+            You are logged in.
+        </p>
+        
+        <p class="text-sm font-semibold text-gray-500 mb-2">
+            User Data Saved:
+        </p>
+        <code class="block bg-gray-50 p-4 rounded-lg text-left overflow-x-auto text-sm text-gray-700">
+            {{ user_data | safe }}
+        </code>
+        <div class="mt-8 flex justify-center space-x-4">
+             <button id="logout-test-btn" class="px-6 py-3 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition">
+                Logout & Clear Test Session
+            </button>
+             <a href="/test" class="px-6 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition">
+                Go to Login Page
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // --- Dynamic Message Logic ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const status = params.get('status');
+            const userDataString = params.get('user');
+            
+            let userName = 'User';
+            if (userDataString) {
+                try {
+                    const userData = JSON.parse(decodeURIComponent(userDataString));
+                    if (userData.name) {
+                        userName = userData.name.split(' ')[0]; // Use first name
+                    }
+                } catch (e) {
+                    console.error("Failed to parse user data for display.");
+                }
+            }
+
+            const welcomeMessageElement = document.getElementById('welcome-message');
+            const contextMessageElement = document.getElementById('context-message');
+
+            if (status === 'register') {
+                welcomeMessageElement.textContent = `Welcome, ${userName}!`;
+                contextMessageElement.textContent = "You've successfully registered a new account.";
+                welcomeMessageElement.classList.remove('text-green-600');
+                welcomeMessageElement.classList.add('text-indigo-600');
+            } else if (status === 'login') {
+                welcomeMessageElement.textContent = `Welcome back, ${userName}!`;
+                contextMessageElement.textContent = "You have successfully logged into your account.";
+            }
+        });
+
+
+        // --- Logout Logic ---
+        document.getElementById('logout-test-btn').addEventListener('click', () => {
+            // Clears the entire mock database (citylinkUsersTest) for a clean restart
+            localStorage.removeItem('citylinkUsersTest'); 
+            // Clears the active session flag (if it exists)
+            localStorage.removeItem('citylinkUser');
+            // Redirects to the authentication page
+            window.location.href = '/test';
+        });
+    </script>
+</body>
+</html>

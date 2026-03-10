@@ -1,0 +1,24 @@
+:root {
+    --color-primary: #1D4ED8;
+    --color-accent: #EF4444;
+}
+
+.hero-background {
+    /* Using the local file path for the image saved in the static folder */
+    background-image: url('/static/city_hero.png');
+    background-size: cover;
+    background-position: center 30%;
+}
+
+.min-h-screen-minus-header {
+    /* Accounts for the 80px height of the header */
+    min-height: calc(100vh - 80px);
+}
+
+.lucide {
+    stroke-width: 2.25;
+}
+
+button, a {
+    transition: all 0.2s ease-in-out;
+}

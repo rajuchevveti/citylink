@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CityLink - {% block title %}{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='shared/css/global_styles.css') }}">
+    <link rel="icon" type="image/png" href="https://placehold.co/32x32/1D4ED8/FFFFFF?text=L">
+    <style>
+        /* Custom Tailwind config for Inter font */
+        html { font-family: 'Inter', sans-serif; }
+        
+        /* Global Header Height Adjustment */
+        .min-h-screen-minus-header {
+            min-height: calc(100vh - 80px);
+        }
+
+        /* Block for additional page-specific styles (CSS ONLY here) */
+        {% block styles %}{% endblock %}
+    </style>
+</head>
+<body class="{% block body_class %}bg-gray-50 text-gray-800{% endblock %}">
+
+    {% block header %}{% endblock %}
+
+    <main class="{% block main_class %}{% endblock %}">
+        {% block content %}{% endblock %}
+    </main>
+
+    {% block footer %}
+    <footer class="bg-gray-800 text-white mt-12 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-8 border-b border-gray-700 pb-10">
+                <div class="col-span-2 md:col-span-2">
+                    <a href="/" class="text-3xl font-extrabold tracking-tight text-white flex items-center mb-3">
+                        <i data-lucide="link" class="w-8 h-8 mr-2 text-indigo-400"></i>
+                        CityLink
+                    </a>
+                    <p class="text-sm text-gray-400 leading-relaxed mb-4">
+                        The definitive guide for local services. Connecting residents with trusted, verified professionals.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-white mb-4">For Residents</h3>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="/" class="hover:text-indigo-400 transition">Find Services</a></li>
+                        <li><a href="/dashboard" class="hover:text-indigo-400 transition">My Dashboard</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-white mb-4">For Providers</h3>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-indigo-400 transition">List Your Business</a></li>
+                        <li><a href="/login" class="hover:text-indigo-400 transition">Provider Login</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-white mb-4">Company</h3>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="/about" class="hover:text-indigo-400 transition">About Us</a></li>
+                        <li><a href="#" class="hover:text-indigo-400 transition">Support</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-8 text-center md:text-left md:flex justify-between items-center text-sm text-gray-500">
+                <p>&copy; 2025 CityLink. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    {% endblock %}
+
+    <script>
+        lucide.createIcons();
+    </script>
+    
+    {% block scripts %}{% endblock %}
+</body>
+</html>

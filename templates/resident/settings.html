@@ -1,0 +1,158 @@
+{% extends "resident/user_portal_base.html" %}
+
+{% block title %}Account Settings{% endblock %}
+{% block header_title %}Account Settings{% endblock %}
+
+{% block portal_content %}
+
+    <div class="max-w-5xl mx-auto">
+        <!-- Page Header -->
+        <div class="mb-8">
+            <h1 class="text-2xl font-bold text-gray-900">Settings & Security</h1>
+            <p class="text-gray-500 text-sm">Manage your password and notification preferences.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+            <!-- Left Column: Security (Takes 2 cols) -->
+            <div class="lg:col-span-2 space-y-8">
+                
+                <!-- Change Password Card -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
+                    <div class="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
+                        <div class="p-2 bg-indigo-50 text-indigo-600 rounded-lg">
+                            <i data-lucide="shield-check" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-lg font-bold text-gray-900">Security</h2>
+                            <p class="text-xs text-gray-500">Update your password to keep your account safe.</p>
+                        </div>
+                    </div>
+                    
+                    <form id="change-password-form" class="space-y-5">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Current Password</label>
+                            <div class="relative">
+                                <input type="password" id="current-password" 
+                                       class="w-full px-4 py-3 bg-gray-50 border-transparent rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition text-gray-900" 
+                                       placeholder="••••••••" required>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">New Password</label>
+                                <input type="password" id="new-password" 
+                                       class="w-full px-4 py-3 bg-gray-50 border-transparent rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition text-gray-900" 
+                                       placeholder="••••••••" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Confirm Password</label>
+                                <input type="password" id="confirm-password" 
+                                       class="w-full px-4 py-3 bg-gray-50 border-transparent rounded-xl focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition text-gray-900" 
+                                       placeholder="••••••••" required>
+                            </div>
+                        </div>
+
+                        <p id="password-status" class="text-sm font-medium text-center hidden py-3 rounded-lg"></p>
+
+                        <div class="pt-4 flex justify-end">
+                            <button type="submit" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-lg shadow-indigo-200 transition transform active:scale-[0.98]">
+                                Update Password
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Danger Zone -->
+                <div class="bg-white rounded-2xl shadow-sm border border-red-100 p-6 sm:p-8">
+                     <div class="flex items-center gap-3 mb-4">
+                        <div class="p-2 bg-red-50 text-red-600 rounded-lg">
+                            <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+                        </div>
+                        <h2 class="text-lg font-bold text-gray-900">Danger Zone</h2>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-gray-800">Delete Account</p>
+                            <p class="text-xs text-gray-500">Permanently delete your account and all data.</p>
+                        </div>
+                        <button onclick="alert('Account deletion is disabled for this demo.')" class="px-4 py-2 text-xs font-bold text-red-600 border border-red-200 rounded-lg hover:bg-red-50 transition">
+                            Delete Account
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right Column: Notifications (1 col) -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 h-full flex flex-col">
+                    <div class="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
+                        <div class="p-2 bg-blue-50 text-blue-600 rounded-lg">
+                            <i data-lucide="bell" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-lg font-bold text-gray-900">Notifications</h2>
+                            <p class="text-xs text-gray-500">Choose how we reach you.</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6 flex-grow">
+                        <!-- Item 1 -->
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="font-bold text-gray-800 text-sm">Booking Updates</p>
+                                <p class="text-xs text-gray-400 mt-0.5">Status changes & confirmations.</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="notify-email" class="sr-only peer" checked>
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-100 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                            </label>
+                        </div>
+
+                        <!-- Item 2 -->
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="font-bold text-gray-800 text-sm">SMS Alerts</p>
+                                <p class="text-xs text-gray-400 mt-0.5">Urgent messages & quotes.</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="notify-sms" class="sr-only peer">
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-100 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                            </label>
+                        </div>
+
+                        <!-- Item 3 -->
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="font-bold text-gray-800 text-sm">Promotions</p>
+                                <p class="text-xs text-gray-400 mt-0.5">Tips, news, and offers.</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="notify-marketing" class="sr-only peer">
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-100 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-600"></div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 pt-6 border-t border-gray-100">
+                        <button id="save-prefs-btn" class="w-full py-3 bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold rounded-xl transition flex items-center justify-center gap-2">
+                            <i data-lucide="save" class="w-4 h-4"></i> Save Preferences
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ url_for('static', filename='resident/js/settings.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if(typeof lucide !== 'undefined') lucide.createIcons();
+        });
+    </script>
+{% endblock %}

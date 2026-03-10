@@ -1,0 +1,205 @@
+{% extends "business/business_portal_base.html" %}
+
+{% block title %}My Profile & Account Settings{% endblock %}
+
+{% block portal_content %}
+    
+    <div class="bg-white shadow-lg rounded-xl p-6 mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-1">My Profile Editor</h1>
+        <p class="text-gray-600">Update your core contact information and public business name.</p>
+    </div>
+
+    <!-- Profile Form -->
+    <form id="profile-form" class="bg-white p-6 rounded-xl shadow-lg border-t-4 border-indigo-600">
+        
+        <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b pb-2">Business & Contact Information</h2>
+
+        <!-- Status Message -->
+        <div id="form-status-message" class="hidden p-3 mb-4 rounded-lg text-sm font-semibold text-center"></div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            <!-- Column 1: Core Details -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Public Business Name</label>
+                <input type="text" id="profile-name" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Service Type</label>
+                <!-- This field is for display only, reflecting their registration type -->
+                <input type="text" id="profile-business-type" class="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 cursor-not-allowed" readonly>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Contact Email (Primary)</label>
+                <!-- Email is display only for simplicity, changing email is complex -->
+                <input type="email" id="profile-email" class="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 cursor-not-allowed" readonly>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                <input type="tel" id="profile-phone" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required>
+            </div>
+            
+            <!-- NEW: Location field (will be used as 'specialty') -->
+             <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Location (e.g., 'Nizamabad, TS')</label>
+                <input type="text" id="profile-location" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500" required>
+            </div>
+
+        </div>
+        
+        <div class="mt-8 pt-4 border-t border-gray-200 text-right">
+            <button id="save-profile-btn" type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-8 rounded-lg shadow-md transition duration-200">
+                Save Changes
+            </button>
+        </div>
+
+    </form>
+
+    <script>
+        /**
+         * Business My Profile Editor Logic
+         * Loads data from localStorage, saves data via API endpoint.
+         */
+
+        // --- Element References ---
+        const profileForm = document.getElementById('profile-form');
+        const saveButton = document.getElementById('save-profile-btn');
+        const statusMessage = document.getElementById('form-status-message');
+
+        // Input Fields
+        const nameInput = document.getElementById('profile-name');
+        const typeInput = document.getElementById('profile-business-type');
+        const emailInput = document.getElementById('profile-email');
+        const phoneInput = document.getElementById('profile-phone');
+        const locationInput = document.getElementById('profile-location');
+
+        let currentUserId = null;
+
+        // --- Mock Database Utilities ---
+        
+        function getActiveUserSession() {
+            const userData = localStorage.getItem('citylinkUser');
+            if (!userData) return null;
+            return JSON.parse(userData);
+        }
+
+        function getAllUsers() {
+            try {
+                return JSON.parse(localStorage.getItem('citylinkUsers')) || [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function saveAllUsers(users) {
+            localStorage.setItem('citylinkUsers', JSON.stringify(users));
+        }
+        
+        function displayFormStatus(message, isError = false) {
+            statusMessage.textContent = message;
+            statusMessage.classList.remove('hidden', 'bg-red-100', 'text-red-800', 'bg-green-100', 'text-green-800');
+            
+            if (isError) {
+                statusMessage.classList.add('bg-red-100', 'text-red-800');
+            } else {
+                statusMessage.classList.add('bg-green-100', 'text-green-800');
+            }
+            statusMessage.classList.remove('hidden');
+        }
+
+        // --- Core Functions ---
+
+        /** Loads data into form fields on page load. */
+        function loadProfileData() {
+            const user = getActiveUserSession();
+            if (!user) {
+                window.location.href = '/login';
+                return;
+            }
+            
+            currentUserId = user.userId;
+
+            // Populate Fields
+            nameInput.value = user.name || '';
+            emailInput.value = user.email || '';
+            phoneInput.value = user.phone || '';
+            typeInput.value = user.businessType || 'N/A';
+            locationInput.value = user.location || '';
+        }
+
+        /** Handles form submission and updates the user record via API and localStorage. */
+        async function handleProfileSave(event) {
+            event.preventDefault();
+            saveButton.textContent = 'Saving...';
+            saveButton.disabled = true;
+
+            const newName = nameInput.value.trim();
+            const newPhone = phoneInput.value.trim();
+            const newLocation = locationInput.value.trim();
+            
+            if (!newName || !newPhone || !newLocation) {
+                displayFormStatus("All fields are required.", true);
+                saveButton.textContent = 'Save Changes';
+                saveButton.disabled = false;
+                return;
+            }
+            
+            // --- API "Write" Step ---
+            try {
+                const response = await fetch('/api/business/profile/update', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        userId: currentUserId,
+                        name: newName,
+                        phone: newPhone,
+                        location: newLocation
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Server failed to update profile.');
+                }
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // --- Client "Update" Step ---
+                    // Update the master list ('citylinkUsers') and the active session ('citylinkUser')
+                    const allUsers = getAllUsers();
+                    const userIndex = allUsers.findIndex(u => u.userId === currentUserId);
+                    
+                    if (userIndex !== -1) {
+                        allUsers[userIndex].name = newName;
+                        allUsers[userIndex].phone = newPhone;
+                        allUsers[userIndex].location = newLocation;
+                        
+                        saveAllUsers(allUsers);
+                        localStorage.setItem('citylinkUser', JSON.stringify(allUsers[userIndex]));
+
+                        displayFormStatus("Profile updated successfully!", false);
+                    } else {
+                        displayFormStatus("Profile saved to server, but local session update failed.", true);
+                    }
+                } else {
+                    throw new Error(result.error || 'Unknown API error');
+                }
+
+            } catch (error) {
+                console.error("Error saving profile:", error);
+                displayFormStatus(error.message, true);
+            }
+
+            saveButton.textContent = 'Save Changes';
+            saveButton.disabled = false;
+        }
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', loadProfileData);
+        profileForm.addEventListener('submit', handleProfileSave);
+
+    </script>
+{% endblock %}

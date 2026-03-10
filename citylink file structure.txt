@@ -1,0 +1,11 @@
+citylink/
+├── app.py
+├── templates/
+│   ├── index.html
+│   └── auth.html
+└── static/
+    ├── styles.css
+    ├── auth.css
+    ├── script.js
+    └── city_hero.png
+    └── auth.png 

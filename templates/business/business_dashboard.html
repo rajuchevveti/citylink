@@ -1,0 +1,118 @@
+{% extends "business/business_portal_base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+{% block header_title %}Overview{% endblock %}
+
+{% block portal_content %}
+
+    <!-- Welcome Section -->
+    <div class="mb-8">
+        <!-- ADDED ID: dashboard-user-name to make it dynamic -->
+        <h1 class="text-2xl font-bold text-gray-900">Hello, <span id="dashboard-user-name">Partner</span> 👋</h1>
+        <p class="text-gray-500 text-sm">Here is what's happening with your business today.</p>
+    </div>
+
+    <!-- Live Stats Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <!-- Total Revenue -->
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-xs font-bold text-gray-400 uppercase tracking-wide">Total Earnings</p>
+                    <h3 class="text-3xl font-bold text-gray-900 mt-2">€<span id="dash-revenue">0</span></h3>
+                </div>
+                <div class="p-3 bg-green-50 text-green-600 rounded-xl">
+                    <i data-lucide="wallet" class="w-6 h-6"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Jobs -->
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-xs font-bold text-gray-400 uppercase tracking-wide">Active Jobs</p>
+                    <h3 class="text-3xl font-bold text-gray-900 mt-2" id="dash-active-jobs">0</h3>
+                </div>
+                <div class="p-3 bg-blue-50 text-blue-600 rounded-xl">
+                    <i data-lucide="briefcase" class="w-6 h-6"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rating -->
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-xs font-bold text-gray-400 uppercase tracking-wide">Rating</p>
+                    <h3 class="text-3xl font-bold text-gray-900 mt-2 flex items-center">
+                        <span id="dash-rating">0.0</span>
+                        <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-current ml-2"></i>
+                    </h3>
+                </div>
+                <div class="p-3 bg-yellow-50 text-yellow-600 rounded-xl">
+                    <i data-lucide="award" class="w-6 h-6"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Views -->
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-xs font-bold text-gray-400 uppercase tracking-wide">Profile Views</p>
+                    <h3 class="text-3xl font-bold text-gray-900 mt-2">124</h3>
+                </div>
+                <div class="p-3 bg-purple-50 text-purple-600 rounded-xl">
+                    <i data-lucide="eye" class="w-6 h-6"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <!-- Recent Activity (Leads) -->
+        <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+                <h3 class="text-lg font-bold text-gray-900">Recent Inquiries</h3>
+                <a href="/business/leads" class="text-sm text-indigo-600 font-bold hover:underline">View All</a>
+            </div>
+            <div id="dash-leads-list" class="divide-y divide-gray-50">
+                <!-- JS Injects Items Here -->
+                <div class="p-8 text-center text-gray-400 italic">Loading leads...</div>
+            </div>
+        </div>
+
+        <!-- Right Column: Skills & Quick Actions -->
+        <div class="space-y-8">
+            
+            <!-- Top Vouched Skills -->
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+                <h3 class="text-lg font-bold text-gray-900 mb-4">Top Vouched Skills</h3>
+                <!-- Container for Dynamic Skills -->
+                <div id="dash-skills-container" class="space-y-3">
+                    <p class="text-gray-400 text-sm italic">Loading skill data...</p>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="bg-indigo-900 rounded-2xl shadow-lg p-6 text-white">
+                <h3 class="font-bold text-lg mb-4">Quick Actions</h3>
+                <div class="space-y-3">
+                    <a href="/business/editor" class="flex items-center p-3 bg-white/10 rounded-xl hover:bg-white/20 transition">
+                        <i data-lucide="plus" class="w-5 h-5 mr-3"></i> Add New Service
+                    </a>
+                    <a href="/business/myprofile" class="flex items-center p-3 bg-white/10 rounded-xl hover:bg-white/20 transition">
+                        <i data-lucide="edit-3" class="w-5 h-5 mr-3"></i> Edit Profile
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Load Dashboard Specific Logic -->
+    <script src="{{ url_for('static', filename='business/js/dashboard_home.js') }}"></script>
+
+{% endblock %}

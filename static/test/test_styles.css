@@ -1,0 +1,17 @@
+/* Minimal styles for the Auth Test Console */
+body {
+    padding: 20px;
+    background-color: #f3f4f6; /* Tailwind gray-100 */
+}
+
+/* Base form styling */
+input[type="email"], input[type="password"], input[type="text"], input[type="tel"], select {
+    outline: none !important;
+    transition: all 0.2s;
+}
+
+/* Utility classes for status messages */
+.bg-red-100 { background-color: #fef2f2; }
+.text-red-800 { color: #991b1b; }
+.bg-green-100 { background-color: #f0fdf4; }
+.text-green-800 { color: #14532d; }
